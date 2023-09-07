@@ -1,0 +1,5 @@
+name: Build and run to-do helper
+"on":
+  workflow_dispatch:
+env:
+  CI: false

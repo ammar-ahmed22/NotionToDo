@@ -1,0 +1,28 @@
+{
+  "name": "notion-to-do",
+  "version": "1.0.0",
+  "description": "To-do helper for Notion to-do database",
+  "main": "dist/index.js",
+  "author": "Ammar Ahmed",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/node": "^20.5.9",
+    "nodemon": "^3.0.1",
+    "ts-node": "^10.9.1",
+    "tsc": "^2.0.4",
+    "typescript": "^5.2.2"
+  },
+  "scripts": {
+    "start": "node dist/index.js",
+    "clean": "rm -rf dist",
+    "prebuild": "yarn clean",
+    "build": "tsc",
+    "dev": "ts-node src/index.ts"
+  },
+  "dependencies": {
+    "@notionhq/client": "^2.2.13",
+    "date-fns": "^2.30.0",
+    "dotenv": "^16.3.1",
+    "twilio": "^4.17.0"
+  }
+}
