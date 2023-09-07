@@ -40,7 +40,7 @@ const filter: FilterType = {
 
 ( async () => {
   const resp = await notion.databases.query({
-    database_id: process.env.DATABASE_ID as string,
+    database_id: process.env.NOTION_DB_ID as string,
     filter,
   })
 
@@ -54,6 +54,6 @@ const filter: FilterType = {
   await twilio.messages.create({
     body: constructMessage(todos),
     from: process.env.TW_PH_NUM,
-    to: "+14168364386"
+    to: process.env.MY_PH_NUM as string
   });
 })()

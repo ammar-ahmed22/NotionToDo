@@ -3,3 +3,17 @@ name: Build and run to-do helper
   workflow_dispatch:
 env:
   CI: false
+  TW_ACCOUNT_SID: "${{ secrets.TW_ACCOUNT_SID }}"
+  TW_AUTH_TOKEN: "${{ secrets.TW_AUTH_TOKEN }}"
+  TW_PH_NUM: "${{ secrets.TW_PH_NUM }}"
+  NOTION_TOKEN: "${{ secrets.NOTION_TOKEN }}"
+  NOTION_DB_ID: "${{ secrets.NOTION_DB_ID }}"
+  MY_PH_NUM: "${{ secrets.MY_PH_NUM }}"
+jobs:
+  build_and_run:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - run: yarn install --frozen-lockfile
+      - run: CI=false yarn build
+      - run: yarn start
