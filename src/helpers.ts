@@ -63,7 +63,7 @@ export const constructMessage = (todos: Todo[]) => {
   for (let i = 0; i < todos.length; i++) {
     const todo = todos[i];
     const last = todos.length - 1;
-    message += `${todo.name}\nDue: ${format(todo.dueDate ?? new Date(), "LLL do, yyy @ h:mm aaa")}\nClass: ${todo.class?.join(",")}\nType: ${todo.type?.join(",")}\nFor: ${todo.for}${i !== last ? "\n\n" : ""}`
+    message += `${todo.name}\nDue: ${format(todo.dueDate ?? new Date(), "LLL do, yyy @ h:mm aaa", { timeZone: "America/Toronto"})}\nClass: ${todo.class?.join(",")}\nType: ${todo.type?.join(",")}\nFor: ${todo.for}${i !== last ? "\n\n" : ""}`
   }
 
   return message;
