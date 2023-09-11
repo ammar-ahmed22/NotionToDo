@@ -1,5 +1,6 @@
 import { PageObjectResponse } from "@notionhq/client/build/src/api-endpoints"
 import { parseISO, format } from "date-fns";
+import { utcToZonedTime } from "date-fns-tz"
 
 
 type Todo = {
@@ -25,6 +26,7 @@ export const parseResults = (results: PageObjectResponse[]) => {
     }
 
     if (props["Due Date"].type === "date" && props["Due Date"].date?.start) {
+      
       todo.dueDate = parseISO(props["Due Date"].date?.start);
     }
 
@@ -63,7 +65,9 @@ export const constructMessage = (todos: Todo[]) => {
   for (let i = 0; i < todos.length; i++) {
     const todo = todos[i];
     const last = todos.length - 1;
-    message += `${todo.name}\nDue: ${format(todo.dueDate ?? new Date(), "LLL do, yyy @ h:mm aaa", { timeZone: "America/Toronto"})}\nClass: ${todo.class?.join(",")}\nType: ${todo.type?.join(",")}\nFor: ${todo.for}${i !== last ? "\n\n" : ""}`
+    const tz = "America/Toronto";
+    const date = todo.dueDate ? utcToZonedTime(todo.dueDate, tz) : new Date();
+    message += `${todo.name}\nDue: ${format(date, "LLL do, yyy @ h:mm aaa")}\nClass: ${todo.class?.join(",")}\nType: ${todo.type?.join(",")}\nFor: ${todo.for}${i !== last ? "\n\n" : ""}`
   }
 
   return message;
