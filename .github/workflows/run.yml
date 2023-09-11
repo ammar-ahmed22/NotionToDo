@@ -2,7 +2,7 @@ name: Build and run to-do helper
 "on":
   workflow_dispatch:
   schedule:
-    - cron: "0 7 * * *"
+    - cron: "0 11 * * *"
 env:
   CI: false
   TW_ACCOUNT_SID: "${{ secrets.TW_ACCOUNT_SID }}"
