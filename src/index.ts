@@ -37,12 +37,12 @@ const filter: FilterType = {
         }
       ]
     },
-    {
-      property: "Deliverable",
-      checkbox: {
-        equals: true
-      }
-    },
+    // {
+    //   property: "Deliverable",
+    //   checkbox: {
+    //     equals: true
+    //   }
+    // },
     {
       property: "Status",
       status: {

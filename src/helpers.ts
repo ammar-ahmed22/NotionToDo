@@ -9,7 +9,8 @@ type Todo = {
   type?: string[],
   class?: string[],
   for?: string,
-  priority?: string
+  priority?: string,
+  deliverable?: boolean
 }
 
 
@@ -46,29 +47,48 @@ export const parseResults = (results: PageObjectResponse[]) => {
       todo.priority = props.Priority.select?.name;
     }
 
+    if (props.Deliverable.type === "checkbox") {
+      todo.deliverable = props.Deliverable.checkbox.valueOf();
+    }
+
     todos.push(todo);
   }
 
   return todos;
 }
 
-
-export const constructMessage = (todos: Todo[]) => {
-  let message = "To-do's for this week:\n\n";
+const sortTodos = (todos: Todo[]) => {
   todos.sort((a, b) => {
     if (a.dueDate && b.dueDate) {
-      return a.dueDate.getTime() - b.dueDate.getTime()
+      return a.dueDate.getTime() - b.dueDate.getTime();
     }
-    return 0
-  });
+    return 0;
+  })
+}
 
-  for (let i = 0; i < todos.length; i++) {
-    const todo = todos[i];
-    const last = todos.length - 1;
-    const tz = "America/Toronto";
-    const date = todo.dueDate ? utcToZonedTime(todo.dueDate, tz) : new Date();
-    message += `${todo.name}\nDue: ${format(date, "EEEE LLL. do, yyy @ h:mm aaa")}\nClass: ${todo.class?.join(",")}\nType: ${todo.type?.join(",")}\nFor: ${todo.for}${i !== last ? "\n\n" : ""}`
-  }
+const createMessageEntry = (todo: Todo, last: boolean = false) => {
+  const tz = "America/Toronto";
+  const date = todo.dueDate ? utcToZonedTime(todo.dueDate, tz) : new Date();
+  return `${todo.name}\nDue: ${format(date, "EEEE LLL. do, yyy @ h:mm aaa")}\nClass: ${todo.class?.join(",")}\nType: ${todo.type?.join(",")}\nFor: ${todo.for}${last ? "" : "\n\n"}`
+}
+
+export const constructMessage = (todos: Todo[]) => {
+  let message = "✅ To-do's for this week:\n\n";
+  const deliverables = todos.filter(t => t.deliverable);
+  const nonDeliverables = todos.filter(t => !t.deliverable);
+
+  sortTodos(deliverables);
+  sortTodos(nonDeliverables);
+  
+  message += "📝 Deliverables:\n"
+  deliverables.forEach((t, i) => {
+    message += createMessageEntry(t);
+  })
+
+  message += "🔔 Non-Deliverables:\n"
+  nonDeliverables.forEach((t, i) => {
+    message += createMessageEntry(t, i === nonDeliverables.length - 1);
+  })
 
   return message;
 }
