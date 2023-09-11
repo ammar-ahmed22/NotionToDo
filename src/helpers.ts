@@ -67,7 +67,7 @@ export const constructMessage = (todos: Todo[]) => {
     const last = todos.length - 1;
     const tz = "America/Toronto";
     const date = todo.dueDate ? utcToZonedTime(todo.dueDate, tz) : new Date();
-    message += `${todo.name}\nDue: ${format(date, "LLL do, yyy @ h:mm aaa")}\nClass: ${todo.class?.join(",")}\nType: ${todo.type?.join(",")}\nFor: ${todo.for}${i !== last ? "\n\n" : ""}`
+    message += `${todo.name}\nDue: ${format(date, "EEEE LLL. do, yyy @ h:mm aaa")}\nClass: ${todo.class?.join(",")}\nType: ${todo.type?.join(",")}\nFor: ${todo.for}${i !== last ? "\n\n" : ""}`
   }
 
   return message;

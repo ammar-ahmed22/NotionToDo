@@ -21,7 +21,21 @@ const filter: FilterType = {
       property: "Due Date",
       date: {
         next_week: {}
-      }
+      },
+      or: [
+        {
+          property: "Due Date",
+          date: {
+            past_week: {}
+          }
+        },
+        {
+          property: "Due Date",
+          date: {
+            this_week: {}
+          }
+        }
+      ]
     },
     {
       property: "Deliverable",
@@ -48,12 +62,15 @@ const filter: FilterType = {
   resp.results.forEach(val => {
     if (val.object === "page" && isFullPage(val)) pageObjects.push(val);
   })
-
+  
   const todos = parseResults(pageObjects);
-  console.log(constructMessage(todos));
-  await twilio.messages.create({
-    body: constructMessage(todos),
-    from: process.env.TW_PH_NUM,
-    to: process.env.MY_PH_NUM as string
-  });
+  if (process.env.NODE_ENV === "development") console.log(constructMessage(todos));
+  if (process.env.NODE_ENV === "production") {
+    await twilio.messages.create({
+      body: constructMessage(todos),
+      from: process.env.TW_PH_NUM,
+      to: process.env.MY_PH_NUM as string
+    });
+  }
+  
 })()
